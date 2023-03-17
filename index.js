@@ -47,10 +47,8 @@ io.on("connection", (socket) => {
   // Allow bot to send a welcome message to user  
 socket.on('welcome-message',(username)=>{
     socket.emit('welcome-message',
-        `Hello ${username}. Welcome to FaxFood. we will be assisting you with your order`
+        `Hello ${username}. Welcome to FaxFood. we will be assisting you with your order <br> Please type <b>1</b> to view list of available items in the menu`
     )
-    //allow client to view list of available menu
-    setTimeout(()=>{botResponse(`Please type <b>1</b> to view list of available menu.`)},2000) 
 } )
 
  //Bot auto Response to the client function
