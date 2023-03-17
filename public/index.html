@@ -122,7 +122,7 @@
       form.addEventListener('submit', function(e) {
       e.preventDefault();
 
-      const msg = `${username}: ${input.value}`
+      const msg = input.value
       if (input.value) {
 
       //send client message to server
@@ -133,12 +133,25 @@
    
   })
   // print out client message from server back to client
-  socket.on('chat message',  addMessage);
-  socket.on('welcome-message', addMessage)
+  socket.on('chat message',  addClientMessage);
+  // print out bot welcome message
+  socket.on('welcome-message', addBotMessage)
+  // printout bot auto-responses
+  socket.on("bot-response",addBotMessage
+)
 
-  function addMessage(msg) {
+
+  function addClientMessage(msg) {
     var item = document.createElement('li');
-    item.innerHTML = msg;
+    item.innerHTML =`${username}: ${msg}` ;
+    messages.appendChild(item);
+    window.scrollTo(0, document.body.scrollHeight);
+  }
+
+  
+  function addBotMessage(msg) {
+    var item = document.createElement('li');
+    item.innerHTML =`Bot: ${msg}` ;
     messages.appendChild(item);
     window.scrollTo(0, document.body.scrollHeight);
   }
