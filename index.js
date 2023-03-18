@@ -56,6 +56,7 @@ io.on("connection", (socket) => {
 
   //listen to chat-messgae event from client
   socket.on("chat message", (msg) => {
+    io.emit('chat message', msg)
     clientResponse(msg);
   });
 
