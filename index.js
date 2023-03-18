@@ -19,18 +19,14 @@ const sessionMiddleware = session({
 app.use(sessionMiddleware);
 io.engine.use(sessionMiddleware);
 
-const snacks = [
-  { name: "Meatpie", price: 1200, tag: "2", qty: 0 },
-  { name: "Doughnut", price: 1000, tag: "4", qty: 0 },
-  { name: "Sausage", price: 1500, tag: "6", qty: 0 },
-  { name: "Bread", price: 500, tag: "8", qty: 0 },
-];
 
-const orderHistory = [];
+
 
 //listen on the 'connection'/'disconnection' events for incoming sockets and log it to the console
 io.on("connection", (socket) => {
   console.log(`a user connected: ${socket.id}`);
+
+  const orderHistory = [];
   let customer = {
     name: "",
     cart: [],
@@ -65,6 +61,13 @@ io.on("connection", (socket) => {
 
   const clientResponse = async (msg) => {
     try {
+      
+      const snacks = [
+  { name: "Meatpie", price: 1200, tag: "2", qty: 1 },
+  { name: "Doughnut", price: 1000, tag: "4", qty: 1 },
+  { name: "Sausage", price: 1500, tag: "6", qty: 1},
+  { name: "Bread", price: 500, tag: "8", qty: 1 },
+];
       switch (msg) {
         case "1":
           // create a list a menu
@@ -73,7 +76,8 @@ io.on("connection", (socket) => {
             .join("\n");
           customer.cart = [];
           await botResponse(
-            `Available snacks and their respective tags: <br>${menuList} Please select one by typing its corresponding tag.`
+            `Available snacks and their respective tags: <br>${menuList} 
+            Please select one by typing its corresponding tag.`
           );
           break;
 
@@ -85,14 +89,22 @@ io.on("connection", (socket) => {
           // look through the cart if item is there
           const item1InCart = customer.cart.findIndex((val) => val.tag === "2");
           // if item is not there, add it to cartand increase the quantity by 1
-          customer.cart = [];
+
           if (item1InCart === -1) {
-            item1Requested.qty = 1;
+            //if itemRequested is not in cart, push into an array of customer.cart 
             customer.cart.push(item1Requested);
-          }
+          }else {
+            customer.cart[item1InCart].qty += 1}
 
           await botResponse(
-            `<b>${item1Requested.name}</b> has been added to cart. <br> Type <b>1</b> to place more orders.<br> Type <b>97</b> to view cart. <br> Type <b>99</b> to checkout. <br> type<b>98</b> to view checked out order(s).`
+            `<b>${item1Requested.name}</b> has been added to cart. <br>
+            Type <b>2</b> to add more <b>${item1Requested.name} </b> to cart <br>
+            Type <b>4</b> to add <b>Doughnut</b> to cart <br>
+            Type <b>6</b> to add <b>Sausage</b> to cart <br>
+            Type <b>8</b> to add <b>Bread</b> to cart <br>
+            Type <b>97</b> to view cart. <br> Type <b>99</b> to checkout. <br> 
+            Type<b>98</b> to view checked out order(s).<br>
+            Type <b>0</b> to cancel order`
           );
           break;
 
@@ -103,13 +115,21 @@ io.on("connection", (socket) => {
           // look through the cart if item is there
           const item2InCart = customer.cart.findIndex((val) => val.tag === "4");
           // if item is not there, add it to cartand increase the quantity by 1
-          customer.cart = [];
+          
           if (item2InCart === -1) {
-            item2Requested.qty = 1;
+
             customer.cart.push(item2Requested);
-          }
+          }else {
+            customer.cart[item2InCart].qty += 1}
           await botResponse(
-            `<b>${item2Requested.name}</b> has been added to cart. <br> Type <b>1</b> to place more orders.<br> Type <b>97</b> to view cart. <br> Type <b>99</b> to checkout. <br> type<b>98</b> to view checked out order(s).`
+            `<b>${item2Requested.name}</b> has been added to cart. <br>
+            Type <b>4</b> to add more <b>${item2Requested.name} </b> to cart <br>
+            Type <b>2</b> to add <b>Meatpie</b> to cart <br>
+            Type <b>6</b> to add <b>Sausage</b> to cart <br>
+            Type <b>8</b> to add <b>Bread</b> to cart <br>
+            Type <b>97</b> to view cart. <br> Type <b>99</b> to checkout. <br> 
+            Type<b>98</b> to view checked out order(s).<br>
+            Type <b>0</b> to cancel order`
           );
           break;
 
@@ -122,11 +142,18 @@ io.on("connection", (socket) => {
           // if item is not there, add it to cartand increase the quantity by 1
           
           if (item3InCart === -1) {
-            item3Requested.qty = 1;
             customer.cart.push(item3Requested);
-          }
+          }else {
+            customer.cart[item3InCart].qty++}
           await botResponse(
-            `<b>${item3Requested.name}</b> has been added to cart. <br> Type <b>1</b> to place more orders.<br> Type <b>97</b> to view cart. <br> Type <b>99</b> to checkout. <br> type<b>98</b> to view checked out order(s).`
+            `<b>${item3Requested.name}</b> has been added to cart. <br>
+            Type <b>6</b> to add more <b>${item3Requested.name} </b> to cart <br>
+            Type <b>2</b> to add <b>Meatpie</b> to cart <br>
+            Type <b>4</b> to add <b>Doughnut</b> to cart <br>
+            Type <b>8</b> to add <b>Bread</b> to cart <br>
+            Type <b>97</b> to view cart. <br> Type <b>99</b> to checkout. <br> 
+            Type<b>98</b> to view checked out order(s).<br>
+            Type <b>0</b> to cancel order`
           );
           break;
 
@@ -139,12 +166,19 @@ io.on("connection", (socket) => {
           // if item is not there, add it to cartand increase the quantity by 1
           
           if (item4InCart === -1) {
-            console.log(item4Requested)
-            item4Requested.qty = 1;
+            
             customer.cart.push(item4Requested);
-          }
+          }else {
+            customer.cart[item4InCart].qty++}
           await botResponse(
-            `<b>${item4Requested.name}</b> has been added to cart. <br> Type <b>1</b> to place more orders.<br> Type <b>97</b> to view cart. <br> Type <b>99</b> to checkout. <br> type<b>98</b> to view checked out order(s).`
+            `<b>${item4Requested.name}</b> has been added to cart. <br>
+            Type <b>8</b> to add more <b>${item4Requested.name} </b> to cart <br>
+            Type <b>2</b> to add <b>Meatpie</b> to cart <br>
+            Type <b>4</b> to add <b>Doughnut</b> to cart <br>
+            Type <b>6</b> to add <b>Sausage</b> to cart <br>
+            Type <b>97</b> to view cart. <br> Type <b>99</b> to checkout. <br> 
+            Type<b>98</b> to view checked out order(s).<br>
+            Type <b>0</b> to cancel order`
           );
           break;
         //  checkout
@@ -156,7 +190,9 @@ io.on("connection", (socket) => {
           } else {
             customer.cart.map((prod) => orderHistory.push(prod));
             await botResponse(
-              "Order placed succesfully! <br> Type <b>1</b> to place more order(s) <br> Type <b>98</b> to view cheched out orders(s). "
+              `Order placed succesfully! <br> 
+              Type <b>1</b> to place more order(s) <br> 
+              Type <b>98</b> to view cheched out orders(s). `
             );
             customer.cart = [];
           }
@@ -180,7 +216,10 @@ io.on("connection", (socket) => {
               .join("\n");
 
             await botResponse(
-              `Here is a list of item(s) in your cart :<br>${currentOrder}Total cost:${price} <br> Type <b>1</b> to place more order(s) <br> Type <b>99</b> to checkout `
+              `Here is a list of item(s) in your cart :<br>
+              ${currentOrder}Total cost:${price} <br> 
+              Type <b>0</b> to cance order(s) <br> 
+              Type <b>99</b> to checkout `
             );
           }
           break;
@@ -220,7 +259,7 @@ io.on("connection", (socket) => {
           } else {
             customer.cart = [];
             await botResponse(
-              "Order cancelled. type <b>1</b> to view list of options"
+              "Order cancelled. type <b>1</b> to place new order"
             );
           }
           break;
