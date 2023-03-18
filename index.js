@@ -73,12 +73,12 @@ io.on("connection", (socket) => {
         case "1":
           // create a list a menu
           const menuList = snacks
-            .map((food) => `<b>${food.name}</b> =><b>${food.tag}</b><br>`)
+            .map((food) => `Type <b>${food.tag}</b> to add <b> ${food.name}</b> to cart <br>`)
             .join("\n");
           customer.cart = [];
           await botResponse(
-            `Available snacks and their respective tags: <br>${menuList} 
-            Please select one by typing its corresponding tag.`
+            `Available snacks: <br>${menuList}`
+            
           );
           break;
 
